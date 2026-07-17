@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NEXUS | Robotic Control Interface</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "error-container": "#9f0519",
+              "secondary-fixed": "#cfe6f2",
+              "surface-tint": "#8ff5ff",
+              "error": "#ff716c",
+              "surface-container-low": "#0f141a",
+              "secondary-fixed-dim": "#c1d8e4",
+              "on-error": "#490006",
+              "on-surface-variant": "#a8abb3",
+              "on-tertiary-fixed": "#3a0006",
+              "on-primary": "#005d63",
+              "on-secondary-container": "#bdd4e0",
+              "primary-container": "#00eefc",
+              "surface-container-highest": "#20262f",
+              "primary-dim": "#00deec",
+              "surface-container-high": "#1b2028",
+              "on-tertiary": "#49000a",
+              "secondary-container": "#354a53",
+              "outline": "#72757d",
+              "on-secondary-fixed-variant": "#495f69",
+              "background": "#0a0e14",
+              "tertiary-container": "#fc003b",
+              "surface-variant": "#20262f",
+              "primary-fixed-dim": "#00deec",
+              "surface-container": "#151a21",
+              "on-primary-fixed-variant": "#005e64",
+              "tertiary-fixed": "#ff9191",
+              "secondary-dim": "#c1d8e4",
+              "inverse-surface": "#f8f9ff",
+              "secondary": "#cfe6f2",
+              "on-secondary": "#40555f",
+              "surface-dim": "#0a0e14",
+              "tertiary-fixed-dim": "#ff7a7c",
+              "on-primary-container": "#005359",
+              "on-error-container": "#ffa8a3",
+              "primary-fixed": "#00eefc",
+              "on-primary-fixed": "#003f43",
+              "surface-bright": "#262c36",
+              "tertiary-dim": "#e90036",
+              "on-background": "#f1f3fc",
+              "on-secondary-fixed": "#2d424c",
+              "surface-container-lowest": "#000000",
+              "error-dim": "#d7383b",
+              "on-tertiary-fixed-variant": "#790017",
+              "inverse-primary": "#006a71",
+              "on-surface": "#f1f3fc",
+              "inverse-on-surface": "#51555c",
+              "tertiary": "#ff7073",
+              "primary": "#8ff5ff",
+              "on-tertiary-container": "#000000",
+              "outline-variant": "#44484f",
+              "surface": "#0a0e14"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"],
+              "mono": ["JetBrains Mono"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(21, 26, 33, 0.6);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0a0e14; }
+        ::-webkit-scrollbar-thumb { background: #20262f; border-radius: 10px; }
+        input[type=range] { appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-runnable-track { background: #20262f; height: 4px; border-radius: 2px; }
+        input[type=range]::-webkit-slider-thumb { appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #00eefc; margin-top: -6px; box-shadow: 0 0 10px rgba(0, 238, 252, 0.5); cursor: pointer; border: 2px solid #0a0e14; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body overflow-hidden">
+<!-- TopAppBar Component -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-3 bg-[#0a0e14]/80 backdrop-blur-md">
+<div class="text-xl font-black tracking-tighter text-cyan-400 drop-shadow-[0_0_8px_rgba(0,240,255,0.4)] font-headline">
+            NEXUS
+        </h2>
+        <p class="text-[9px] text-slate-400 font-mono mt-1">SECURE_LINK_ESTABLISHED</p>
+        </div>
+<div class="hidden md:flex gap-8 items-center">
+<span class="text-cyan-400 font-bold font-headline tracking-tight text-sm uppercase cursor-pointer hover:text-cyan-300 transition-colors">Environment</span>
+<span class="text-slate-500 font-headline tracking-tight text-sm uppercase cursor-pointer hover:text-cyan-300 transition-colors">Kinematics</span>
+<span class="text-slate-500 font-headline tracking-tight text-sm uppercase cursor-pointer hover:text-cyan-300 transition-colors">Safety</span>
+</div>
+<div class="flex items-center gap-4 text-cyan-400">
+<span class="material-symbols-outlined cursor-pointer hover:text-cyan-300 active:scale-95 duration-100">sensors</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-cyan-300 active:scale-95 duration-100">account_circle</span>
+</div>
+</header>
+<!-- SideNavBar Component -->
+<aside class="hidden md:flex fixed left-0 top-0 h-full w-64 bg-[#151a21]/95 backdrop-blur-3xl flex-col p-6 z-40 pt-20 shadow-2xl">
+<div class="flex items-center gap-3 mb-10">
+<div class="w-10 h-10 bg-surface-variant rounded-full flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-primary text-sm">precision_manufacturing</span>
+</div>
+<div>
+<div class="text-primary font-bold font-headline text-sm">OPERATOR_01</div>
+<div class="text-on-surface-variant text-[10px] font-mono tracking-tighter">ID: 88-ALPHA</div>
+</div>
+</div>
+<nav class="flex flex-col gap-2 flex-grow">
+<div class="flex items-center gap-3 px-4 py-3 bg-cyan-500/20 text-cyan-400 border-r-4 border-cyan-400 cursor-pointer transition-all duration-300">
+<span class="material-symbols-outlined">language</span>
+<span class="font-headline text-sm uppercase tracking-wider">Environment</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 cursor-pointer transition-all duration-300">
+<span class="material-symbols-outlined">hub</span>
+<span class="font-headline text-sm uppercase tracking-wider">Kinematics</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-800 cursor-pointer transition-all duration-300">
+<span class="material-symbols-outlined">security</span>
+<span class="font-headline text-sm uppercase tracking-wider">Safety</span>
+</div>
+</nav>
+<button class="mt-auto w-full py-4 bg-primary text-on-primary-container font-headline font-bold text-xs tracking-widest uppercase rounded-lg hover:brightness-110 active:scale-95 transition-all">
+            CALIBRATE SYSTEM
+        </button>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:pl-64 pt-16 pb-20 md:pb-0 h-screen flex flex-col md:flex-row">
+<!-- Center Viewport -->
+<section class="flex-grow relative h-[400px] md:h-full bg-surface-container-lowest overflow-hidden">
+<img alt="" class="w-full h-full object-cover opacity-60 mix-blend-screen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_UgzLKQ7MQ2gRS5PEDUmQP4Cvj7Nnpf_pKlDfaJxLuYLRrl2nyxJe6KehIJrChWedndVs9vXQTh8rIQ5kGlSIIh2uIHlIooj0TP_IsXZkIK7avsSQ9t57LzpeD_9OhlvgFXLi6FPwGl3slGXsvVdN76yHsmFEg_eGZkn8ClZgTc62ArvO-kZSC2rWYkW76xTaElBXVmAtoiKPdJgv16qZWn0EAH14NUe7f8fWKjTYSBMernCvah3y_zExVtmS3A81axFl6hVeToY"/>
+<!-- HUD Overlay -->
+<div class="absolute inset-0 pointer-events-none p-6 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="border-l-2 border-t-2 border-primary/40 w-12 h-12"></div>
+<div class="border-r-2 border-t-2 border-primary/40 w-12 h-12"></div>
+</div>
+<div class="flex justify-center items-center">
+<div class="w-24 h-24 border border-primary/20 rounded-full flex items-center justify-center">
+<div class="w-16 h-16 border border-primary/40 rounded-full animate-pulse"></div>
+</div>
+</div>
+<div class="flex justify-between items-end">
+<div class="border-l-2 border-b-2 border-primary/40 w-12 h-12"></div>
+<div class="border-r-2 border-b-2 border-primary/40 w-12 h-12"></div>
+</div>
+</div>
+<!-- Floating Status -->
+<div class="absolute top-6 left-6 flex flex-col gap-2">
+<div class="glass-panel px-3 py-1 rounded-sm border-l-2 border-primary">
+<span class="text-[10px] font-mono text-on-surface-variant block uppercase tracking-tighter">Live Stream</span>
+<span class="text-primary font-mono text-sm font-bold flex items-center gap-2">
+<span class="w-2 h-2 bg-primary rounded-full animate-ping"></span> CAM_01_FEED
+                    </span>
+</div>
+<div class="glass-panel px-3 py-1 rounded-sm">
+<span class="text-[10px] font-mono text-on-surface-variant block uppercase tracking-tighter">Latency</span>
+<span class="text-on-surface font-mono text-sm">12ms</span>
+</div>
+</div>
+</section>
+<!-- Control Sidepanel -->
+<section class="w-full md:w-[420px] bg-surface-container overflow-y-auto border-l border-outline-variant/10">
+<div class="p-6 space-y-8">
+<!-- Telemetry -->
+<div>
+<h3 class="font-headline text-[10px] uppercase tracking-[0.2em] text-on-surface-variant mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-xs">monitoring</span> Real-time Telemetry
+                    </h3>
+<div class="telemetry-grid">
+<div class="glass-panel p-4 rounded-xl flex flex-col justify-between h-28">
+<span class="text-[10px] font-mono text-on-surface-variant uppercase">Voltage</span>
+<div class="text-2xl font-mono text-primary">24.4<span class="text-xs ml-1">V</span></div>
+<div class="w-full bg-surface-variant h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[80%]"></div>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-xl flex flex-col justify-between h-28">
+<span class="text-[10px] font-mono text-on-surface-variant uppercase">Temperature</span>
+<div class="text-2xl font-mono text-primary">38.2<span class="text-xs ml-1">°C</span></div>
+<div class="w-full bg-surface-variant h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[45%]"></div>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-xl flex flex-col justify-between h-28">
+<span class="text-[10px] font-mono text-on-surface-variant uppercase">Torque</span>
+<div class="text-2xl font-mono text-primary">0.82<span class="text-xs ml-1">Nm</span></div>
+<div class="w-full bg-surface-variant h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[15%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- 6-Axis Controls -->
+<div>
+<h3 class="font-headline text-[10px] uppercase tracking-[0.2em] text-on-surface-variant mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-xs">settings_input_component</span> Kinematics Engine
+                    </h3>
+<div class="space-y-6">
+<div class="grid grid-cols-1 gap-5">
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] font-mono uppercase text-on-surface-variant">
+<span>Joint Axis J1</span>
+<span class="text-primary font-bold">142.5°</span>
+</div>
+<input class="w-full" max="360" min="0" type="range" value="142"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] font-mono uppercase text-on-surface-variant">
+<span>Joint Axis J2</span>
+<span class="text-primary font-bold">-45.0°</span>
+</div>
+<input class="w-full" max="90" min="-90" type="range" value="-45"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] font-mono uppercase text-on-surface-variant">
+<span>Joint Axis J3</span>
+<span class="text-primary font-bold">88.2°</span>
+</div>
+<input class="w-full" max="180" min="0" type="range" value="88"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] font-mono uppercase text-on-surface-variant">
+<span>Joint Axis J4</span>
+<span class="text-primary font-bold">12.0°</span>
+</div>
+<input class="w-full" max="360" min="0" type="range" value="12"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] font-mono uppercase text-on-surface-variant">
+<span>Joint Axis J5</span>
+<span class="text-primary font-bold">0.0°</span>
+</div>
+<input class="w-full" max="180" min="-180" type="range" value="0"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] font-mono uppercase text-on-surface-variant">
+<span>Joint Axis J6</span>
+<span class="text-primary font-bold">180.0°</span>
+</div>
+<input class="w-full" max="360" min="0" type="range" value="180"/>
+</div>
+</div>
+<!-- Gripper Toggle -->
+<div class="flex items-center justify-between glass-panel p-4 rounded-xl">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">precision_manufacturing</span>
+<div>
+<div class="text-xs font-headline font-bold uppercase tracking-widest">End Effector</div>
+<div class="text-[10px] font-mono text-on-surface-variant uppercase">Pneumatic Gripper</div>
+</div>
+</div>
+<div class="flex items-center bg-surface-container-highest p-1 rounded-full w-20 relative cursor-pointer group">
+<div class="bg-primary w-8 h-8 rounded-full shadow-[0_0_12px_rgba(0,238,252,0.4)] transition-all"></div>
+<span class="absolute right-3 text-[10px] font-bold text-on-surface-variant">OFF</span>
+</div>
+</div>
+<!-- Safety & Emergency -->
+<div class="pt-4 flex flex-col gap-4">
+<div class="grid grid-cols-2 gap-4">
+<button class="py-3 bg-surface-container-high border border-outline-variant/20 rounded-xl text-[10px] font-headline font-bold uppercase tracking-widest text-on-surface hover:bg-surface-container-highest transition-all">
+                                    Home Pos
+                                </button>
+<button class="py-3 bg-surface-container-high border border-outline-variant/20 rounded-xl text-[10px] font-headline font-bold uppercase tracking-widest text-on-surface hover:bg-surface-container-highest transition-all">
+                                    Zero Offset
+                                </button>
+</div>
+<button class="relative group w-full py-8 bg-tertiary-container text-on-tertiary font-black font-headline text-xl tracking-[0.3em] uppercase rounded-2xl shadow-[0_0_30px_rgba(252,0,59,0.3)] hover:brightness-110 active:scale-[0.98] transition-all overflow-hidden">
+<div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="relative z-10">Emergency Stop</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar Component -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-4 pt-2 bg-[#0a0e14]/90 backdrop-blur-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.5)] rounded-t-xl border-none">
+<div class="flex flex-col items-center justify-center bg-cyan-500/10 text-cyan-400 rounded-lg px-4 py-1 border-b-2 border-cyan-400">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+<span class="font-mono text-[10px] tracking-widest uppercase mt-1">Control</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 px-4 py-1 hover:bg-slate-800/50">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-mono text-[10px] tracking-widest uppercase mt-1">Telemetry</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 px-4 py-1 hover:bg-slate-800/50">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="font-mono text-[10px] tracking-widest uppercase mt-1">Logs</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 px-4 py-1 hover:bg-slate-800/50">
+<span class="material-symbols-outlined">settings_input_component</span>
+<span class="font-mono text-[10px] tracking-widest uppercase mt-1">Setup</span>
+</div>
+</nav>
+</body></html>

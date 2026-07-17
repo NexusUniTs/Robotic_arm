@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NEXUS | Robotic Control Interface</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "error-container": "#9f0519",
+              "secondary-fixed": "#cfe6f2",
+              "surface-tint": "#8ff5ff",
+              "error": "#ff716c",
+              "surface-container-low": "#0f141a",
+              "secondary-fixed-dim": "#c1d8e4",
+              "on-error": "#490006",
+              "on-surface-variant": "#a8abb3",
+              "on-tertiary-fixed": "#3a0006",
+              "on-primary": "#005d63",
+              "on-secondary-container": "#bdd4e0",
+              "primary-container": "#00eefc",
+              "surface-container-highest": "#20262f",
+              "primary-dim": "#00deec",
+              "surface-container-high": "#1b2028",
+              "on-tertiary": "#49000a",
+              "secondary-container": "#354a53",
+              "outline": "#72757d",
+              "on-secondary-fixed-variant": "#495f69",
+              "background": "#0a0e14",
+              "tertiary-container": "#fc003b",
+              "surface-variant": "#20262f",
+              "primary-fixed-dim": "#00deec",
+              "surface-container": "#151a21",
+              "on-primary-fixed-variant": "#005e64",
+              "tertiary-fixed": "#ff9191",
+              "secondary-dim": "#c1d8e4",
+              "inverse-surface": "#f8f9ff",
+              "secondary": "#cfe6f2",
+              "on-secondary": "#40555f",
+              "surface-dim": "#0a0e14",
+              "tertiary-fixed-dim": "#ff7a7c",
+              "on-primary-container": "#005359",
+              "on-error-container": "#ffa8a3",
+              "primary-fixed": "#00eefc",
+              "on-primary-fixed": "#003f43",
+              "surface-bright": "#262c36",
+              "tertiary-dim": "#e90036",
+              "on-background": "#f1f3fc",
+              "on-secondary-fixed": "#2d424c",
+              "surface-container-lowest": "#000000",
+              "error-dim": "#d7383b",
+              "on-tertiary-fixed-variant": "#790017",
+              "inverse-primary": "#006a71",
+              "on-surface": "#f1f3fc",
+              "inverse-on-surface": "#51555c",
+              "tertiary": "#ff7073",
+              "primary": "#8ff5ff",
+              "on-tertiary-container": "#000000",
+              "outline-variant": "#44484f",
+              "surface": "#0a0e14"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"],
+              "mono": ["JetBrains Mono"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(21, 26, 33, 0.6);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0a0e14; }
+        ::-webkit-scrollbar-thumb { background: #20262f; border-radius: 10px; }
+        input[type=range] { appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-runnable-track { background: #20262f; height: 4px; border-radius: 2px; }
+        input[type=range]::-webkit-slider-thumb { appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #00eefc; margin-top: -6px; box-shadow: 0 0 10px rgba(0, 238, 252, 0.5); cursor: pointer; border: 2px solid #0a0e14; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body overflow-hidden">
+<!-- TopAppBar Component -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-[#0a0e14]/80 backdrop-blur-md">
+    <!-- Spacer for precise centering -->
+    <div class="w-[150px] hidden md:block"></div>
+    
+    <!-- Centered NEXUS Title -->
+    <div class="absolute left-1/2 -translate-x-1/2 text-3xl font-black tracking-[0.2em] text-cyan-400 drop-shadow-[0_0_15px_rgba(0,240,255,0.6)] font-headline">
+        NEXUS
+    </div>
+    
+    <!-- Connectivity Indicator -->
+    <div id="connection-status" class="flex items-center gap-2 bg-surface-container-highest px-4 py-2 rounded-full border border-outline-variant/30 shadow-lg relative z-10 w-fit">
+        <div id="connection-dot" class="w-3 h-3 rounded-full bg-error animate-pulse shadow-[0_0_8px_rgba(255,113,108,0.8)]"></div>
+        <span id="connection-text" class="text-[11px] font-mono text-error uppercase tracking-widest font-bold">LINK LOST</span>
+    </div>
+</header>
+
+<!-- Main Content Canvas -->
+<main class="w-full pt-16 pb-20 md:pb-0 h-screen flex justify-center items-center bg-background overflow-hidden relative group">
+<!-- Interactive Background Area -->
+<div class="absolute inset-0 pointer-events-none z-0">
+    <!-- Breathing Particles Canvas -->
+    <canvas id="particle-canvas" class="absolute inset-0 w-full h-full opacity-50"></canvas>
+    <!-- Mouse Radial Glow -->
+    <div id="cursor-glow" class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-screen" style="background: radial-gradient(600px circle at 50% 50%, rgba(0,238,252,0.12), transparent 40%);"></div>
+</div>
+<!-- Centered Control Panel -->
+<section class="w-full md:w-[600px] bg-surface-container overflow-y-auto rounded-3xl border border-outline-variant/20 shadow-[0_0_60px_rgba(0,0,0,0.8)] max-h-[85vh] relative z-10">
+<div class="p-8 space-y-10">
+<!-- Telemetry -->
+<div>
+<h3 class="font-headline text-xs uppercase tracking-[0.2em] text-on-surface-variant mb-5 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">monitoring</span> Real-time Telemetry
+                    </h3>
+<div class="telemetry-grid">
+<div class="glass-panel p-5 rounded-2xl flex flex-col justify-between h-32">
+<span class="text-[11px] font-mono text-on-surface-variant uppercase tracking-widest">Voltage</span>
+<div class="text-3xl font-mono text-primary">24.4<span class="text-sm ml-1 text-primary/70">V</span></div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[80%]"></div>
+</div>
+</div>
+<div class="glass-panel p-5 rounded-2xl flex flex-col justify-between h-32">
+<span class="text-[11px] font-mono text-on-surface-variant uppercase tracking-widest">Temperature</span>
+<div class="text-3xl font-mono text-primary">38.2<span class="text-sm ml-1 text-primary/70">°C</span></div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[45%]"></div>
+</div>
+</div>
+<div class="glass-panel p-5 rounded-2xl flex flex-col justify-between h-32">
+<span class="text-[11px] font-mono text-on-surface-variant uppercase tracking-widest">Torque</span>
+<div class="text-3xl font-mono text-primary">0.82<span class="text-sm ml-1 text-primary/70">Nm</span></div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[15%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- 6-Axis Controls -->
+<div>
+<h3 class="font-headline text-xs uppercase tracking-[0.2em] text-on-surface-variant mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">settings_input_component</span> Kinematics Engine
+                    </h3>
+<div class="space-y-6">
+<div class="grid grid-cols-1 gap-6">
+<div class="space-y-3">
+<div class="flex justify-between text-[11px] font-mono uppercase text-on-surface-variant tracking-wider">
+<span>Joint Axis J1</span>
+<span class="text-primary font-bold text-sm">142.5°</span>
+</div>
+<input class="w-full cursor-pointer" max="360" min="0" type="range" value="142"/>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-[11px] font-mono uppercase text-on-surface-variant tracking-wider">
+<span>Joint Axis J2</span>
+<span class="text-primary font-bold text-sm">-45.0°</span>
+</div>
+<input class="w-full cursor-pointer" max="90" min="-90" type="range" value="-45"/>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-[11px] font-mono uppercase text-on-surface-variant tracking-wider">
+<span>Joint Axis J3</span>
+<span class="text-primary font-bold text-sm">88.2°</span>
+</div>
+<input class="w-full cursor-pointer" max="180" min="0" type="range" value="88"/>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-[11px] font-mono uppercase text-on-surface-variant tracking-wider">
+<span>Joint Axis J4</span>
+<span class="text-primary font-bold text-sm">12.0°</span>
+</div>
+<input class="w-full cursor-pointer" max="360" min="0" type="range" value="12"/>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-[11px] font-mono uppercase text-on-surface-variant tracking-wider">
+<span>Joint Axis J5</span>
+<span class="text-primary font-bold text-sm">0.0°</span>
+</div>
+<input class="w-full cursor-pointer" max="180" min="-180" type="range" value="0"/>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-[11px] font-mono uppercase text-on-surface-variant tracking-wider">
+<span>Joint Axis J6</span>
+<span class="text-primary font-bold text-sm">180.0°</span>
+</div>
+<input class="w-full cursor-pointer" max="360" min="0" type="range" value="180"/>
+</div>
+</div>
+
+<!-- Gripper Toggle -->
+<div class="flex items-center justify-between glass-panel p-5 rounded-2xl mt-8" id="gripper-container">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">precision_manufacturing</span>
+<div>
+<div class="text-sm font-headline font-bold uppercase tracking-widest">End Effector</div>
+<div class="text-xs font-mono text-on-surface-variant uppercase tracking-wider">Pneumatic Gripper</div>
+</div>
+</div>
+<div class="flex items-center bg-surface-container-highest p-1.5 rounded-full w-24 relative cursor-pointer group shadow-inner" id="gripper-toggle">
+<div class="bg-surface-variant w-10 h-10 rounded-full transition-all duration-300" id="gripper-thumb"></div>
+<span class="absolute right-4 text-xs font-bold text-on-surface-variant" id="gripper-label">OFF</span>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</main>
+
+
+<script>
+    let target_joints = {j1: 142, j2: -45, j3: 88, j4: 12, j5: 0, j6: 180};
+    
+    // Gripper control logic
+    let gripperActive = false;
+    const gripperToggle = document.getElementById('gripper-toggle');
+    const gripperThumb = document.getElementById('gripper-thumb');
+    const gripperLabel = document.getElementById('gripper-label');
+
+    if (gripperToggle) {
+        gripperToggle.addEventListener('click', async () => {
+            gripperActive = !gripperActive;
+            
+            if (gripperActive) {
+                gripperThumb.classList.remove('bg-surface-variant');
+                gripperThumb.classList.add('bg-primary', 'shadow-[0_0_12px_rgba(0,238,252,0.4)]', 'translate-x-11');
+                gripperLabel.innerText = 'ON';
+                gripperLabel.classList.replace('right-4', 'left-4');
+                gripperLabel.classList.replace('text-on-surface-variant', 'text-primary');
+            } else {
+                gripperThumb.classList.add('bg-surface-variant');
+                gripperThumb.classList.remove('bg-primary', 'shadow-[0_0_12px_rgba(0,238,252,0.4)]', 'translate-x-11');
+                gripperLabel.innerText = 'OFF';
+                gripperLabel.classList.replace('left-4', 'right-4');
+                gripperLabel.classList.replace('text-primary', 'text-on-surface-variant');
+            }
+            
+            await fetch('/api/dashboard_sync/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ gripper: gripperActive })
+            });
+        });
+    }
+
+    const sliders = document.querySelectorAll('input[type="range"]');
+
+    // Interactive Background Logic
+    const cursorGlow = document.getElementById('cursor-glow');
+    if (cursorGlow) {
+        document.addEventListener('mousemove', (e) => {
+            cursorGlow.style.background = `radial-gradient(800px circle at ${e.clientX}px ${e.clientY}px, rgba(0,238,252,0.15), transparent 40%)`;
+        });
+    }
+
+    // Breathing Particles Animation
+    const canvas = document.getElementById('particle-canvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+        
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 1.5 + 0.5; // Small size
+                this.baseSize = this.size;
+                this.speedX = Math.random() * 0.3 - 0.15; // Slow drift
+                this.speedY = Math.random() * 0.3 - 0.15;
+                this.angle = Math.random() * Math.PI * 2;
+                this.vAngle = Math.random() * 0.03 + 0.01; // Breath speed
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.angle += this.vAngle;
+                
+                // Breath effect using sine wave on size
+                this.size = this.baseSize + Math.sin(this.angle) * (this.baseSize * 0.8);
+
+                // Screen wrap
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height;
+                if (this.y > height) this.y = 0;
+            }
+            draw() {
+                const alpha = 0.4 + Math.sin(this.angle) * 0.3; // Breath effect on opacity
+                ctx.fillStyle = `rgba(0, 238, 252, ${alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Initialize points
+        for(let i=0; i<150; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            // Slight transparency on clear for trailing effect
+            ctx.clearRect(0, 0, width, height);
+            for(let p of particles) {
+                p.update();
+                p.draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+    }
+
+    sliders.forEach((slider, index) => {
+        const valElement = slider.previousElementSibling.querySelector('.text-primary.font-bold');
+        slider.addEventListener('input', async (e) => {
+            const val = Number(e.target.value);
+            valElement.innerText = val.toFixed(1) + '°';
+            target_joints[`j${index+1}`] = val;
+            
+            await fetch('/api/dashboard_sync/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ target_joints })
+            });
+        });
+    });
+
+    // Poll the telemetry coming from the Raspberry Pi
+    async function fetchTelemetry() {
+        try {
+            const response = await fetch('/api/dashboard_sync/');
+            if (response.ok) {
+                const state = await response.json();
+                
+                // Update Connectivity Status
+                const isConnected = state.pi_connected;
+                const dot = document.getElementById('connection-dot');
+                const text = document.getElementById('connection-text');
+                if(isConnected) {
+                    dot.className = "w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_8px_rgba(0,238,252,0.8)]";
+                    text.className = "text-[10px] font-mono text-primary uppercase tracking-widest font-bold";
+                    text.innerText = "HARDWARE LINKED";
+                } else {
+                    dot.className = "w-2.5 h-2.5 rounded-full bg-error animate-pulse shadow-[0_0_8px_rgba(255,113,108,0.8)]";
+                    text.className = "text-[10px] font-mono text-error uppercase tracking-widest font-bold";
+                    text.innerText = "LINK LOST";
+                }
+                
+                // Update Status visually
+                const status = state.current_telemetry.status;
+                if(status) {
+                    const displays = document.querySelectorAll('.text-3xl.font-mono.text-primary');
+                    if(displays.length >= 3) {
+                        displays[0].innerHTML = Number(status.voltage).toFixed(1) + '<span class="text-sm ml-1 text-primary/70">V</span>';
+                        displays[1].innerHTML = Number(status.temperature).toFixed(1) + '<span class="text-sm ml-1 text-primary/70">°C</span>';
+                        displays[2].innerHTML = Number(status.torque).toFixed(2) + '<span class="text-sm ml-1 text-primary/70">Nm</span>';
+                    }
+                }
+            }
+        } catch(e) {
+            console.error(e);
+        }
+    }
+    
+    // Fetch data every 1 second
+    setInterval(fetchTelemetry, 1000);
+    fetchTelemetry();
+</script>
+
+</body></html>
