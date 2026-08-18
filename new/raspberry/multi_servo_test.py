@@ -1,12 +1,3 @@
-#!/usr/bin/env python
-#
-# *********     Ping and Moving Example      *********
-#
-#
-# Available SCServo model on this example : All models using Protocol SCS
-# This example is tested with a SCServo(STS/SMS), and an URT
-#
-
 import sys
 import os
 import time
@@ -37,18 +28,28 @@ else:
     print("Failed to change the baudrate")
     quit()
 
-# Try to ping the ID:1 FTServo
-# Get SCServo model number
-scs_model_number, scs_comm_result, scs_error = packetHandler.ping(1)
+motor_ids = [1, 2]
+
+for scs_id in motor_ids:
+    scs_model_number, scs_comm_result, scs_error = packetHandler.ping(scs_id)
+    if scs_comm_result != COMM_SUCCESS:
+        print("[ID:%03d] %s" % (scs_id, packetHandler.getTxRxResult(scs_comm_result)))
+    else:
+        print("[ID:%03d] ping Succeeded. Model number : %d" % (scs_id, scs_model_number))
+    if scs_error != 0:
+        print("[ID:%03d] %s" % (scs_id, packetHandler.getRxPacketError(scs_error)))
+
+# Servo (ID1) runs at a maximum speed of V=400 * 0.732=43.92rpm and an acceleration of A=80 * 8.7deg/s ^ 2 until it reaches position P1=4095
+scs_comm_result, scs_error = packetHandler.WritePosEx(1, 1000, 100, 60)
 if scs_comm_result != COMM_SUCCESS:
     print("%s" % packetHandler.getTxRxResult(scs_comm_result))
-else:
-    print("[ID:%03d] ping Succeeded. SCServo model number : %d" % (1, scs_model_number))
-if scs_error != 0:
+elif scs_error != 0:
     print("%s" % packetHandler.getRxPacketError(scs_error))
 
-# Servo (ID1) runs at a maximum speed of V=60 * 0.732=43.92rpm and an acceleration of A=50 * 8.7deg/s ^ 2 until it reaches position P1=4095
-scs_comm_result, scs_error = packetHandler.WritePosEx(1, 4000, 400, 80)
+time.sleep(3)
+
+# Servo (ID2) runs at a maximum speed of V=60 * 0.732=43.92rpm and an acceleration of A=50 * 8.7deg/s ^ 2 until it reaches position P1=4095
+scs_comm_result, scs_error = packetHandler.WritePosEx(2, 2000, 400, 80)
 if scs_comm_result != COMM_SUCCESS:
     print("%s" % packetHandler.getTxRxResult(scs_comm_result))
 elif scs_error != 0:
@@ -56,16 +57,4 @@ elif scs_error != 0:
 
 time.sleep(((4095 - 0) / (60 * 50) + (60 * 50) / (50 * 100) + 0.05))  # [(P1-P0)/(V*50)] + [(V*50)/(A*100)] + 0.05
 
-# Servo (ID1) runs at a maximum speed of V=60 * 0.732=43.92rpm and an acceleration of A=50 * 8.7deg/s ^ 2 until P0=0 position
-scs_comm_result, scs_error = packetHandler.WritePosEx(1, 0, 400, 50)
-if scs_comm_result != COMM_SUCCESS:
-    print("%s" % packetHandler.getTxRxResult(scs_comm_result))
-elif scs_error != 0:
-    print("%s" % packetHandler.getRxPacketError(scs_error))
-
-time.sleep(((4095 - 0) / (60 * 50) + (60 * 50) / (50 * 100) + 0.05))  # [(P1-P0)/(V*50)] + [(V*50)/(A*100)] + 0.05
-
-
-
-# Close port
 portHandler.closePort()
