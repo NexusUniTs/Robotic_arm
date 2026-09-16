@@ -1,3 +1,5 @@
+# Codice per muovere in una singola esecuzione tutti e sei i motori.
+# Si possono aggiungere quanti motori si vogliono, basta che abbiano id univoco
 import sys
 import os
 import time
@@ -40,7 +42,7 @@ for scs_id in motor_ids:
         print("[ID:%03d] %s" % (scs_id, packetHandler.getRxPacketError(scs_error)))
 
 # Servo (ID1) runs at a maximum speed of V=400 * 0.732=43.92rpm and an acceleration of A=80 * 8.7deg/s ^ 2 until it reaches position P1=4095
-scs_comm_result, scs_error = packetHandler.WritePosEx(1, 1000, 100, 60)
+scs_comm_result, scs_error = packetHandler.WritePosEx(1, 3400, -60, 80)
 if scs_comm_result != COMM_SUCCESS:
     print("%s" % packetHandler.getTxRxResult(scs_comm_result))
 elif scs_error != 0:
@@ -49,11 +51,44 @@ elif scs_error != 0:
 time.sleep(3)
 
 # Servo (ID2) runs at a maximum speed of V=60 * 0.732=43.92rpm and an acceleration of A=50 * 8.7deg/s ^ 2 until it reaches position P1=4095
-scs_comm_result, scs_error = packetHandler.WritePosEx(2, 2000, 400, 80)
+scs_comm_result, scs_error = packetHandler.WritePosEx(2, 1470, -60, 50)
 if scs_comm_result != COMM_SUCCESS:
     print("%s" % packetHandler.getTxRxResult(scs_comm_result))
 elif scs_error != 0:
     print("%s" % packetHandler.getRxPacketError(scs_error))
+
+
+scs_comm_result, scs_error = packetHandler.WritePosEx(3, 1330, -60, 50)
+if scs_comm_result != COMM_SUCCESS:
+    print("%s" % packetHandler.getTxRxResult(scs_comm_result))
+elif scs_error != 0:
+    print("%s" % packetHandler.getRxPacketError(scs_error))
+
+time.sleep(3)
+
+scs_comm_result, scs_error = packetHandler.WritePosEx(4, 33, -80, 50)
+if scs_comm_result != COMM_SUCCESS:
+    print("%s" % packetHandler.getTxRxResult(scs_comm_result))
+elif scs_error != 0:
+    print("%s" % packetHandler.getRxPacketError(scs_error))
+
+time.sleep(3)
+
+scs_comm_result, scs_error = packetHandler.WritePosEx(5, 3240, -80, 50)
+if scs_comm_result != COMM_SUCCESS:
+    print("%s" % packetHandler.getTxRxResult(scs_comm_result))
+elif scs_error != 0:
+    print("%s" % packetHandler.getRxPacketError(scs_error))
+
+time.sleep(3)
+
+scs_comm_result, scs_error = packetHandler.WritePosEx(6, 1090, -80, 50)
+if scs_comm_result != COMM_SUCCESS:
+    print("%s" % packetHandler.getTxRxResult(scs_comm_result))
+elif scs_error != 0:
+    print("%s" % packetHandler.getRxPacketError(scs_error))
+
+time.sleep(3)
 
 time.sleep(((4095 - 0) / (60 * 50) + (60 * 50) / (50 * 100) + 0.05))  # [(P1-P0)/(V*50)] + [(V*50)/(A*100)] + 0.05
 

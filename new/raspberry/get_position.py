@@ -1,3 +1,4 @@
+#Codice per rilevare la posizione angolare del servo, in 4096esimi
 import sys
 import os
 import time
@@ -28,7 +29,7 @@ else:
     print("Failed to change the baudrate")
     quit()
 
-for scs_id in [1, 2]:
+for scs_id in [1, 2, 3, 4, 5, 6]:
 
     pos, speed, comm_result, error = packetHandler.ReadPosSpeed(scs_id)
 

@@ -13,7 +13,7 @@ from FTServo_Python.scservo_sdk import *         # Uses FTServo SDK library
 portHandler = PortHandler('COM5')
 packetHandler = sms_sts(portHandler)
 
-OLD_ID = 1
+OLD_ID = 2
 
 # Apertura porta
 if portHandler.openPort():
