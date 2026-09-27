@@ -1,11 +1,9 @@
 # Codice per muovere in una singola esecuzione tutti e sei i motori.
 # Si possono aggiungere quanti motori si vogliono, basta che abbiano id univoco
 import sys
-import os
-import time
 
-sys.path.append("..")
-from FTServo_Python.scservo_sdk import *                   # Uses FTServo SDK library
+sys.path.append("../../..")
+from new.raspberry.Icaro.FTServo_Python.scservo_sdk import *                   # Uses FTServo SDK library
 
 
 # Initialize PortHandler instance
@@ -29,7 +27,7 @@ if portHandler.setBaudRate(1000000):
 else:
     print("Failed to change the baudrate")
     quit()
-
+motor_values = []
 motor_ids = [1, 2]
 
 for scs_id in motor_ids:
@@ -42,7 +40,7 @@ for scs_id in motor_ids:
         print("[ID:%03d] %s" % (scs_id, packetHandler.getRxPacketError(scs_error)))
 
 # Servo (ID1) runs at a maximum speed of V=400 * 0.732=43.92rpm and an acceleration of A=80 * 8.7deg/s ^ 2 until it reaches position P1=4095
-scs_comm_result, scs_error = packetHandler.WritePosEx(1, 3400, -60, 80)
+scs_comm_result, scs_error = packetHandler.WritePosEx(1, motor_values[0], -60, 80)
 if scs_comm_result != COMM_SUCCESS:
     print("%s" % packetHandler.getTxRxResult(scs_comm_result))
 elif scs_error != 0:

@@ -1,43 +1,50 @@
 # Definizione di metodo che permette di comandare il servo usando angoli in 365esimi.
 
-from new.raspberry.FTServo_Python.scservo_sdk import COMM_SUCCESS
+from new.raspberry.Icaro.FTServo_Python.scservo_sdk import COMM_SUCCESS
 
 JOINTS = {
     1: {
         "zero_raw": 2510,
-        "min_angle": -90,
-        "max_angle": 90,
+        "min_angle": 90,
+        "max_angle": -90,
+        "direction": 1,
     },
 
     2: {
-        "zero_raw": 1500,
-        "min_angle": -45,
-        "max_angle": 120,
+        "zero_raw": 2450,
+        "min_angle": -90,
+        "max_angle": 90,
+        "direction": -1,
     },
 
     3: {
-        "zero_raw": 2320,
-        "min_angle": -90,
-        "max_angle": 90,
+        "zero_raw": 200,
+        "min_angle": -180,
+        "max_angle": 0,
+        "direction": -1,
     },
 
     4: {
-            "zero_raw": 35,
+            "zero_raw": 3180,
             "min_angle": -90,
             "max_angle": 90,
-            "forbidden_raw": (1050, 3090)
+            "forbidden_raw": (64, 2060),
+            "direction": -1,
     },
 
     5: {
-            "zero_raw": 170,
+            "zero_raw": 3190,
             "min_angle": -180,
             "max_angle": 180,
+            "direction": 1,
     },
 
     6: {
             "zero_raw": 1080,
             "min_angle": 0,
             "max_angle": 90,
+            "direction": 1,
+
     },
 }
 
@@ -50,14 +57,15 @@ def angle_to_raw(scs_id, angle_deg, steps_per_rev=4096):
     """
     joints = JOINTS[scs_id]
     zero_raw = joints["zero_raw"]
-    raw = zero_raw + int(angle_deg * steps_per_rev / 360)
+    direction = joints["direction"]
+    raw = zero_raw + direction*int(angle_deg * steps_per_rev / 360)
     return raw
 
 
-def move_to_angle(packetHandler, scs_id, angle_deg, speed, acc):
+def move_to_angle(packetHandler, scs_id, angle_input: float, speed, acc):
     joints = JOINTS[scs_id]
     # clamp di sicurezza software, prima ancora di mandare il pacchetto
-    angle_deg = max(joints["min_angle"], min(joints["max_angle"], angle_deg))
+    angle_deg = max(joints["min_angle"], min(joints["max_angle"], angle_input))
 
     pos = angle_to_raw(scs_id, angle_deg)
     forbidden_raw = joints.get("forbidden_raw")

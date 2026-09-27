@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# *********     Ping and Moving Example      *********
+# *********     Ping and Moving Example with new function of moving      *********
 #
 #
 # Available SCServo model on this example : All models using Protocol SCS
@@ -8,17 +8,17 @@
 #
 
 import sys
-import os
-import time
 
-sys.path.append("..")
-from FTServo_Python.scservo_sdk import *                   # Uses FTServo SDK library
+from new.raspberry.Icaro.design_tools.move_to_angle import move_to_angle
+
+sys.path.append("../../..")
+from new.raspberry.Icaro.FTServo_Python.scservo_sdk import *                   # Uses FTServo SDK library
 
 
 # Initialize PortHandler instance
 # Set the port path
 # Get methods and members of PortHandlerLinux or PortHandlerWindows
-portHandler = PortHandler('COM5') #ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
+portHandler = PortHandler('COM3') #ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
 
 # Initialize PacketHandler instance
 # Get methods and members of Protocol
@@ -48,13 +48,14 @@ if scs_error != 0:
     print("%s" % packetHandler.getRxPacketError(scs_error))
 
 # Servo (ID1) runs at a maximum speed of V=60 * 0.732=43.92rpm and an acceleration of A=50 * 8.7deg/s ^ 2 until it reaches position P1=4095
-scs_comm_result, scs_error = packetHandler.WritePosEx(1, 3000, -150, 120)
+scs_comm_result, scs_error = move_to_angle(packetHandler, 6, 0, 200, 50)
 if scs_comm_result != COMM_SUCCESS:
     print("%s" % packetHandler.getTxRxResult(scs_comm_result))
 elif scs_error != 0:
     print("%s" % packetHandler.getRxPacketError(scs_error))
 
-time.sleep(((4095 - 0) / (60 * 50) + (60 * 50) / (50 * 100) + 0.05))  # [(P1-P0)/(V*50)] + [(V*50)/(A*100)] + 0.05
+
+
 
 # Close port
 portHandler.closePort()

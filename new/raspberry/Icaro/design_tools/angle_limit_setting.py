@@ -1,17 +1,15 @@
 # Questo codice si occupa di riscrivere i limiti meccanici di rotazione di un servo specificato
 # con il scs_id, impostando MAX_ANGLE e MIN_ANGLE sulla memoria EPROM
 import sys
-import os
-import time
 
-sys.path.append("..")
-from FTServo_Python.scservo_sdk import *
+sys.path.append("../../..")
+from new.raspberry.Icaro.FTServo_Python.scservo_sdk import *
 
-scs_id = 6
-min_pos = 1090
-max_pos = 2170
+scs_id = 5
+min_pos = 0
+max_pos = 4095
 
-portHandler = PortHandler('COM5')
+portHandler = PortHandler('COM3')
 packetHandler = sms_sts(portHandler)
 
 # Open port

@@ -4,11 +4,9 @@
 #
 # ATTENZIONE: collega SOLO il motore di cui vuoi cambiare l'ID (deve essere su ID 1).
 import sys
-import os
-import time
 
-sys.path.append("..")
-from FTServo_Python.scservo_sdk import *         # Uses FTServo SDK library
+sys.path.append("../../..")
+from new.raspberry.Icaro.FTServo_Python.scservo_sdk import *         # Uses FTServo SDK library
 
 portHandler = PortHandler('COM5')
 packetHandler = sms_sts(portHandler)

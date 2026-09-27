@@ -1,16 +1,14 @@
 #Codice per rilevare la posizione angolare del servo, in 4096esimi
 import sys
-import os
-import time
 
-sys.path.append("..")
-from FTServo_Python.scservo_sdk import *                   # Uses FTServo SDK library
+sys.path.append("../../..")
+from new.raspberry.Icaro.FTServo_Python.scservo_sdk import *                   # Uses FTServo SDK library
 
 
 # Initialize PortHandler instance
 # Set the port path
 # Get methods and members of PortHandlerLinux or PortHandlerWindows
-portHandler = PortHandler('COM5') #ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
+portHandler = PortHandler('COM3') #ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
 
 # Initialize PacketHandler instance
 # Get methods and members of Protocol
@@ -28,7 +26,7 @@ if portHandler.setBaudRate(1000000):
 else:
     print("Failed to change the baudrate")
     quit()
-
+q_pos = []
 for scs_id in [1, 2, 3, 4, 5, 6]:
 
     pos, speed, comm_result, error = packetHandler.ReadPosSpeed(scs_id)
@@ -38,5 +36,7 @@ for scs_id in [1, 2, 3, 4, 5, 6]:
             f"[ID:{scs_id}] "
             f"position={pos}, speed={speed}"
         )
+        q_pos[scs_id] = pos
     else:
         print(packetHandler.getTxRxResult(comm_result))
+
