@@ -1,5 +1,5 @@
 """
-Modello cinematico del braccio robotico Icaro.
+Modello cinematico del braccio robotico RobotArm.
 
 Questo modulo contiene la modellizzazione del manipolatore a 5 gradi
 di libertà secondo la convenzione di Denavit-Hartenberg.
@@ -26,7 +26,7 @@ robot = DHRobot(
         RevoluteDH(a = 0.155),
         RevoluteDH(alpha= -np.pi/2, offset = -np.pi/2),
         RevoluteDH(d = 0.065)
-    ], name='Icaro'
+    ], name='RobotArm'
 )
 
 def solve_fk(q):

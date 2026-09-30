@@ -6,7 +6,7 @@
 import sys
 
 sys.path.append("../../..")
-from new.raspberry.Icaro.FTServo_Python.scservo_sdk import *         # Uses FTServo SDK library
+from new.raspberry.RobotArm.FTServo_Python.scservo_sdk import *         # Uses FTServo SDK library
 
 portHandler = PortHandler('COM5')
 packetHandler = sms_sts(portHandler)

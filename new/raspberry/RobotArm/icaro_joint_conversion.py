@@ -1,5 +1,5 @@
 """
-Configurazione e conversione delle coordinate articolari di Icaro.
+Configurazione e conversione delle coordinate articolari di RobotArm.
 
 Questo modulo contiene i parametri di calibrazione dei singoli giunti
 e gestisce la conversione tra gli angoli del modello del robot e le

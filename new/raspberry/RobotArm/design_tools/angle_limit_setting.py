@@ -3,7 +3,7 @@
 import sys
 
 sys.path.append("../../..")
-from new.raspberry.Icaro.FTServo_Python.scservo_sdk import *
+from new.raspberry.RobotArm.FTServo_Python.scservo_sdk import *
 
 scs_id = 5
 min_pos = 0

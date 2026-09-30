@@ -1,10 +1,11 @@
-from new.raspberry.Icaro.joint_conversion import raw_to_angle, angle_to_raw
-from new.raspberry.Icaro.kinematics import solve_ik
-from new.raspberry.Icaro.robot_arm import RobotArm
+from new.raspberry.RobotArm.icaro_joint_conversion import raw_to_angle, angle_to_raw
+from new.raspberry.RobotArm.icaro_kinematics import solve_ik
+from new.raspberry.RobotArm.robot_arm import RobotArm
 import numpy as np
 
 
 def main():
+    #Se si vuole eseguire questo codice su Dedalo va modificato il main
     icaro = RobotArm()
     icaro.connect()
 

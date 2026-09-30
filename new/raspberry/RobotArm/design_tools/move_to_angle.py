@@ -1,6 +1,6 @@
 # Definizione di metodo che permette di comandare il servo usando angoli in 365esimi.
 
-from new.raspberry.Icaro.FTServo_Python.scservo_sdk import COMM_SUCCESS
+from new.raspberry.RobotArm.FTServo_Python.scservo_sdk import COMM_SUCCESS
 
 JOINTS = {
     1: {

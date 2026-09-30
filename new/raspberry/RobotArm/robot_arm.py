@@ -1,5 +1,5 @@
 """
-Interfaccia hardware del braccio robotico Icaro.
+Interfaccia hardware del braccio robotico RobotArm.
 
 Questo modulo gestisce la comunicazione tra il software e il robot fisico
 tramite la libreria FTServo.

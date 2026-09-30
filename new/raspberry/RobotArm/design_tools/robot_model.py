@@ -4,7 +4,7 @@ import roboticstoolbox as rtb
 from roboticstoolbox import RevoluteDH
 from roboticstoolbox.robot import DHRobot
 
-#Modellizzazione di Icaro (manipolatore robotico a 5 gradi di libertà) secondo la convenzione DH
+#Modellizzazione di RobotArm (manipolatore robotico a 5 gradi di libertà) secondo la convenzione DH
 robot = DHRobot(
     [
         RevoluteDH(d= 0.023, alpha= np.pi/2),
@@ -12,7 +12,7 @@ robot = DHRobot(
         RevoluteDH(a = 0.155),
         RevoluteDH(alpha= -np.pi/2, offset = -np.pi/2),
         RevoluteDH(d = 0.065)
-    ], name='Icaro'
+    ], name='RobotArm'
 )
 # Stampa il modello del robot e la relativa tabella DH
 print(robot)

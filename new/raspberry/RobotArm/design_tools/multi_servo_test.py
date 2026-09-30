@@ -3,7 +3,7 @@
 import sys
 
 sys.path.append("../../..")
-from new.raspberry.Icaro.FTServo_Python.scservo_sdk import *                   # Uses FTServo SDK library
+from new.raspberry.RobotArm.FTServo_Python.scservo_sdk import *                   # Uses FTServo SDK library
 
 
 # Initialize PortHandler instance
@@ -40,7 +40,7 @@ for scs_id in motor_ids:
         print("[ID:%03d] %s" % (scs_id, packetHandler.getRxPacketError(scs_error)))
 
 # Servo (ID1) runs at a maximum speed of V=400 * 0.732=43.92rpm and an acceleration of A=80 * 8.7deg/s ^ 2 until it reaches position P1=4095
-scs_comm_result, scs_error = packetHandler.WritePosEx(1, motor_values[0], -60, 80)
+scs_comm_result, scs_error = packetHandler.WritePosEx(1, 3400, -60, 80)
 if scs_comm_result != COMM_SUCCESS:
     print("%s" % packetHandler.getTxRxResult(scs_comm_result))
 elif scs_error != 0:
@@ -49,22 +49,14 @@ elif scs_error != 0:
 time.sleep(3)
 
 # Servo (ID2) runs at a maximum speed of V=60 * 0.732=43.92rpm and an acceleration of A=50 * 8.7deg/s ^ 2 until it reaches position P1=4095
-scs_comm_result, scs_error = packetHandler.WritePosEx(2, 1470, -60, 50)
+scs_comm_result, scs_error = packetHandler.WritePosEx(2, 2000, -60, 50)
 if scs_comm_result != COMM_SUCCESS:
     print("%s" % packetHandler.getTxRxResult(scs_comm_result))
 elif scs_error != 0:
     print("%s" % packetHandler.getRxPacketError(scs_error))
 
 
-scs_comm_result, scs_error = packetHandler.WritePosEx(3, 1330, -60, 50)
-if scs_comm_result != COMM_SUCCESS:
-    print("%s" % packetHandler.getTxRxResult(scs_comm_result))
-elif scs_error != 0:
-    print("%s" % packetHandler.getRxPacketError(scs_error))
-
-time.sleep(3)
-
-scs_comm_result, scs_error = packetHandler.WritePosEx(4, 33, -80, 50)
+scs_comm_result, scs_error = packetHandler.WritePosEx(3, 1150, -60, 50)
 if scs_comm_result != COMM_SUCCESS:
     print("%s" % packetHandler.getTxRxResult(scs_comm_result))
 elif scs_error != 0:
@@ -72,7 +64,7 @@ elif scs_error != 0:
 
 time.sleep(3)
 
-scs_comm_result, scs_error = packetHandler.WritePosEx(5, 3240, -80, 50)
+scs_comm_result, scs_error = packetHandler.WritePosEx(4, 90, -80, 50)
 if scs_comm_result != COMM_SUCCESS:
     print("%s" % packetHandler.getTxRxResult(scs_comm_result))
 elif scs_error != 0:
@@ -80,7 +72,15 @@ elif scs_error != 0:
 
 time.sleep(3)
 
-scs_comm_result, scs_error = packetHandler.WritePosEx(6, 1090, -80, 50)
+scs_comm_result, scs_error = packetHandler.WritePosEx(5, 2000, -80, 50)
+if scs_comm_result != COMM_SUCCESS:
+    print("%s" % packetHandler.getTxRxResult(scs_comm_result))
+elif scs_error != 0:
+    print("%s" % packetHandler.getRxPacketError(scs_error))
+
+time.sleep(3)
+
+scs_comm_result, scs_error = packetHandler.WritePosEx(6, 1800, -80, 50)
 if scs_comm_result != COMM_SUCCESS:
     print("%s" % packetHandler.getTxRxResult(scs_comm_result))
 elif scs_error != 0:
