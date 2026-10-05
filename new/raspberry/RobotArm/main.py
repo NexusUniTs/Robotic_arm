@@ -1,3 +1,6 @@
+import time
+
+from new.raspberry.RobotArm import icaro_joint_conversion, dedalo_joint_conversion
 from new.raspberry.RobotArm.icaro_joint_conversion import raw_to_angle, angle_to_raw
 from new.raspberry.RobotArm.icaro_kinematics import solve_ik
 from new.raspberry.RobotArm.robot_arm import RobotArm
@@ -7,13 +10,15 @@ import numpy as np
 def main():
     #Se si vuole eseguire questo codice su Dedalo va modificato il main
     icaro = RobotArm()
-    icaro.connect()
-
+    icaro.connect(5)
+    dedalo = RobotArm()
+    dedalo.connect(3)
+    '''
     q_raw = icaro.get_position()
     q_deg = []
 
     for i in range(5):
-        q_deg.append(raw_to_angle(i+1, q_raw[i]))
+        q_deg.append(icaro_joint_conversion.raw_to_angle(i+1, q_raw[i]))
 
     q_current = np.deg2rad(q_deg)
 
@@ -26,29 +31,32 @@ def main():
     q_sol_raw = []
 
     for i in range(5):
-        q_sol_raw.append(angle_to_raw(i+1, q_sol_deg[i]))
+        q_sol_raw.append(icaro_joint_conversion.angle_to_raw(i+1, q_sol_deg[i]))
 
     gripper_position = 1080
 
     icaro.move_arm(q_sol_raw, gripper_position)
+    '''
+    #Modulo per la timezone delle position da Dedalo
+    try:
+        while True:
+            q_raw_dedalo = dedalo.get_position()
+            q_dedalo = []
 
-    #Modulo per la ricezione delle posizioni dal master
-    while True:
-        q_master = receive_positions()
+            for i in range(6):
+                q_dedalo.append(dedalo_joint_conversion.raw_to_angle(i + 1, q_raw_dedalo[i]))
 
-        icaro.move_arm(
-            q_master[:5],
-            q_master[5]
-        )
-    #Modulo per l'invio delle posizioni al slave
-    while True:
-        q_master = dedalo.get_position()
 
-        send_positions(q_master)
 
-        time.sleep(0.02)
+            icaro.move_arm(
+                q_dedalo[:5],
+                q_dedalo[5]
+            )
+            time.sleep(0.02)
+    finally:
+        icaro.disconnect()
+        dedalo.disconnect()
 
-    icaro.disconnect()
 
 if __name__ == "__main__":
     main()

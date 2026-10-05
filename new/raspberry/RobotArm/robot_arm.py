@@ -13,7 +13,10 @@ Responsabilità principali:
 Questo modulo non si occupa dei calcoli cinematici o della pianificazione
 delle traiettorie.
 """
+import numpy as np
+
 from FTServo_Python.scservo_sdk import *
+from new.raspberry.RobotArm import icaro_joint_conversion
 
 
 class RobotArm:
@@ -23,9 +26,9 @@ class RobotArm:
         self.port_handler = None
         self.packet_handler = None
 
-    def connect(self):
+    def connect(self, x):
         #Apre la comunicazione col robot
-        self.port_handler = PortHandler("COMx")
+        self.port_handler = PortHandler("COM" + str(x))
         self.packet_handler = sms_sts(port_handler)
 
         if port_handler.openPort():
@@ -55,11 +58,16 @@ class RobotArm:
         return (q_pos)
 
     def move_arm(self, q_target, gripper_position):
-        #Comandi i cinque gradi di libertà del braccio
+        # Comandi i cinque gradi di libertà del braccio
         for i in range (5):
-            self.packet_handler.SyncWritePosEx(i+1, q_target[i], 60, 50)
+
+            q_raw = icaro_joint_conversion.angle_to_raw(i+1, q_target)
+            self.packet_handler.SyncWritePosEx(i + 1, q_raw, 60, 50)
+
         #Comanda l'end effector
-        self.packet_handler.SyncWritePosEx(6, gripper_position, 60, 50)
+
+        gripper_raw = icaro_joint_conversion.angle_to_raw(i+1, gripper_position)
+        self.packet_handler.SyncWritePosEx(6, gripper_raw, 60, 50)
 
         self.packet_handler.groupSyncWrite.txPacket()  # invia tutto in un colpo solo
         self.packet_handler.groupSyncWrite.clearParam()
