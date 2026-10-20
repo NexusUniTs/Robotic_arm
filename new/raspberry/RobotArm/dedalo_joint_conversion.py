@@ -22,10 +22,10 @@ I VALORI DI JOINTS DEVONO ESSERE AGGIORNATI A DEDALO
 
 JOINTS = {
     1: {
-        "zero_raw": 2510,
+        "zero_raw": 2600,
         "min_angle": -90,
         "max_angle": 90,
-        "direction": 1,
+        "direction": -1,
     },
 
     2: {
@@ -36,29 +36,30 @@ JOINTS = {
     },
 
     3: {
-        "zero_raw": 200,
+        "zero_raw": 2160,
         "min_angle": -180,
         "max_angle": 0,
         "direction": -1,
+        "forbidden_raw": (91, 2160),
     },
 
     4: {
-            "zero_raw": 3180,
+            "zero_raw": 940,
             "min_angle": -90,
             "max_angle": 90,
-            "forbidden_raw": (64, 2060),
+            "forbidden_raw": (1800, 3900),
             "direction": -1,
     },
 
     5: {
-            "zero_raw": 3190,
+            "zero_raw": 280,
             "min_angle": -180,
             "max_angle": 180,
             "direction": 1,
     },
 
     6: {
-            "zero_raw": 1080,
+            "zero_raw": 350,
             "min_angle": 0,
             "max_angle": 90,
             "direction": 1,
@@ -113,5 +114,11 @@ def raw_to_angle(scs_id, angle_raw, steps_per_rev=4096):
     zero_raw = joints["zero_raw"]
     direction = joints["direction"]
     angle_deg = (angle_raw - zero_raw)*direction*360/steps_per_rev
+    if (scs_id == 3) and (angle_deg >= 180):
+        angle_deg = -179
+    if (scs_id == 4) and (angle_deg <= -180):
+        angle_deg = 90
+    if (scs_id == 3) and (angle_deg >= 179):
+        angle_deg = -179
 
     return angle_deg

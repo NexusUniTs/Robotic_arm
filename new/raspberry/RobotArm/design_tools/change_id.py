@@ -11,8 +11,7 @@ from new.raspberry.RobotArm.FTServo_Python.scservo_sdk import *         # Uses F
 portHandler = PortHandler('COM5')
 packetHandler = sms_sts(portHandler)
 
-OLD_ID = 2
-
+OLD_ID = 1
 # Apertura porta
 if portHandler.openPort():
     print("Succeeded to open the port")

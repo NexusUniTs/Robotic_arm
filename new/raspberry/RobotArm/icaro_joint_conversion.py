@@ -21,44 +21,44 @@ del robot e il sistema di coordinate dei servomotori fisici.
 JOINTS = {
     1: {
         "zero_raw": 2510,
-        "min_angle": -90,
-        "max_angle": 90,
-        "direction": 1,
+        "min_angle": -270,
+        "max_angle": 270,
+        "direction": -1,
     },
 
     2: {
         "zero_raw": 2450,
-        "min_angle": -90,
-        "max_angle": 90,
+        "min_angle": -270,
+        "max_angle": 270,
         "direction": -1,
     },
 
     3: {
         "zero_raw": 200,
-        "min_angle": -180,
-        "max_angle": 0,
+        "min_angle": -270,
+        "max_angle": 270,
         "direction": -1,
     },
 
     4: {
-            "zero_raw": 3180,
-            "min_angle": -90,
-            "max_angle": 90,
-            "forbidden_raw": (64, 2060),
+            "zero_raw": 3100,
+            "min_angle": -180,
+            "max_angle": 180,
+            "forbidden_raw": (200, 1930),
             "direction": -1,
     },
 
     5: {
-            "zero_raw": 3190,
-            "min_angle": -180,
-            "max_angle": 180,
+            "zero_raw": 1030,
+            "min_angle": -360,
+            "max_angle": 360,
             "direction": 1,
     },
 
     6: {
             "zero_raw": 1080,
-            "min_angle": 0,
-            "max_angle": 90,
+            "min_angle": -45,
+            "max_angle": 100,
             "direction": 1,
 
     },
@@ -92,8 +92,15 @@ def angle_to_raw(scs_id, angle_deg, steps_per_rev=4096):
                 fatto reOfsCal / dove è fisicamente montato il corno del servo)
     steps_per_rev: 4096 step = 360° per SMS/STS
     """
-    validate_angle(scs_id, angle_deg)
     joints = JOINTS[scs_id]
+    #if (scs_id == 3) and (angle_deg > 180):
+       #angle_deg = 179
+    if (scs_id == 6) and (angle_deg >= 90):
+        angle_deg = 90
+    if (scs_id == 4) and (angle_deg >= 180):
+        angle_deg = 179
+
+    validate_angle(scs_id, angle_deg)
     zero_raw = joints["zero_raw"]
     direction = joints["direction"]
     raw = zero_raw + direction*int(angle_deg * steps_per_rev / 360)

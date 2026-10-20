@@ -5,9 +5,9 @@ import sys
 sys.path.append("../../..")
 from new.raspberry.RobotArm.FTServo_Python.scservo_sdk import *
 
-scs_id = 5
-min_pos = 0
-max_pos = 4095
+scs_id = 4
+min_pos = 1930
+max_pos = 4096
 
 portHandler = PortHandler('COM3')
 packetHandler = sms_sts(portHandler)

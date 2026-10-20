@@ -10,9 +10,9 @@ import numpy as np
 def main():
     #Se si vuole eseguire questo codice su Dedalo va modificato il main
     icaro = RobotArm()
-    icaro.connect(5)
+    icaro.connect(3)
     dedalo = RobotArm()
-    dedalo.connect(3)
+    dedalo.connect(5)
     '''
     q_raw = icaro.get_position()
     q_deg = []
@@ -47,12 +47,15 @@ def main():
                 q_dedalo.append(dedalo_joint_conversion.raw_to_angle(i + 1, q_raw_dedalo[i]))
 
 
-
             icaro.move_arm(
                 q_dedalo[:5],
                 q_dedalo[5]
             )
-            time.sleep(0.02)
+            '''
+            for i in range(6):
+                print("ID " + str(i+1) + ": " + str(q_raw_dedalo[i]))
+            '''
+            time.sleep(1)
     finally:
         icaro.disconnect()
         dedalo.disconnect()

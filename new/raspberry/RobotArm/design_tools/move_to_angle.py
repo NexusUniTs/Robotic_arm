@@ -4,10 +4,10 @@ from new.raspberry.RobotArm.FTServo_Python.scservo_sdk import COMM_SUCCESS
 
 JOINTS = {
     1: {
-        "zero_raw": 2510,
-        "min_angle": 90,
-        "max_angle": -90,
-        "direction": 1,
+        "zero_raw": 2600,
+        "min_angle": -90,
+        "max_angle": 90,
+        "direction": -1,
     },
 
     2: {
@@ -18,29 +18,30 @@ JOINTS = {
     },
 
     3: {
-        "zero_raw": 200,
+        "zero_raw": 2160,
         "min_angle": -180,
         "max_angle": 0,
         "direction": -1,
+        "forbidden_raw": (91, 2160),
     },
 
     4: {
-            "zero_raw": 3180,
+            "zero_raw": 3100,
             "min_angle": -90,
             "max_angle": 90,
-            "forbidden_raw": (64, 2060),
+            "forbidden_raw": (200, 1930),
             "direction": -1,
     },
 
     5: {
-            "zero_raw": 3190,
+            "zero_raw": 3360,
             "min_angle": -180,
             "max_angle": 180,
             "direction": 1,
     },
 
     6: {
-            "zero_raw": 1080,
+            "zero_raw": 350,
             "min_angle": 0,
             "max_angle": 90,
             "direction": 1,

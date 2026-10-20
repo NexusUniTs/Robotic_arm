@@ -9,6 +9,7 @@
 
 import sys
 
+from new.raspberry.RobotArm import icaro_joint_conversion
 from new.raspberry.RobotArm.design_tools.move_to_angle import move_to_angle
 
 sys.path.append("../../..")
@@ -48,7 +49,7 @@ if scs_error != 0:
     print("%s" % packetHandler.getRxPacketError(scs_error))
 
 # Servo (ID1) runs at a maximum speed of V=60 * 0.732=43.92rpm and an acceleration of A=50 * 8.7deg/s ^ 2 until it reaches position P1=4095
-scs_comm_result, scs_error = move_to_angle(packetHandler, 6, 0, 200, 50)
+scs_comm_result, scs_error = move_to_angle(packetHandler, 4, 0, 200, 50)
 if scs_comm_result != COMM_SUCCESS:
     print("%s" % packetHandler.getTxRxResult(scs_comm_result))
 elif scs_error != 0:

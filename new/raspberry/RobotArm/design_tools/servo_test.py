@@ -16,7 +16,7 @@ from new.raspberry.RobotArm.FTServo_Python.scservo_sdk import *                 
 # Initialize PortHandler instance
 # Set the port path
 # Get methods and members of PortHandlerLinux or PortHandlerWindows
-portHandler = PortHandler('COM5') #ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
+portHandler = PortHandler('COM3') #ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
 
 # Initialize PacketHandler instance
 # Get methods and members of Protocol
@@ -46,7 +46,7 @@ if scs_error != 0:
     print("%s" % packetHandler.getRxPacketError(scs_error))
 
 # Servo (ID1) runs at a maximum speed of V=60 * 0.732=43.92rpm and an acceleration of A=50 * 8.7deg/s ^ 2 until it reaches position P1=4095
-scs_comm_result, scs_error = packetHandler.WritePosEx(3, 1157, 150, 80)
+scs_comm_result, scs_error = packetHandler.WritePosEx(4, 3100, 150, 80)
 if scs_comm_result != COMM_SUCCESS:
     print("%s" % packetHandler.getTxRxResult(scs_comm_result))
 elif scs_error != 0:
