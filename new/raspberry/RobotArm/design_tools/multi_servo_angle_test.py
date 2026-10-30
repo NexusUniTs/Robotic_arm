@@ -49,7 +49,37 @@ if scs_error != 0:
     print("%s" % packetHandler.getRxPacketError(scs_error))
 
 # Servo (ID1) runs at a maximum speed of V=60 * 0.732=43.92rpm and an acceleration of A=50 * 8.7deg/s ^ 2 until it reaches position P1=4095
+scs_comm_result, scs_error = move_to_angle(packetHandler, 1, 90, 200, 50)
+if scs_comm_result != COMM_SUCCESS:
+    print("%s" % packetHandler.getTxRxResult(scs_comm_result))
+elif scs_error != 0:
+    print("%s" % packetHandler.getRxPacketError(scs_error))
+
+scs_comm_result, scs_error = move_to_angle(packetHandler, 2, 90, 200, 50)
+if scs_comm_result != COMM_SUCCESS:
+    print("%s" % packetHandler.getTxRxResult(scs_comm_result))
+elif scs_error != 0:
+    print("%s" % packetHandler.getRxPacketError(scs_error))
+
+scs_comm_result, scs_error = move_to_angle(packetHandler, 3, 10, 200, 50)
+if scs_comm_result != COMM_SUCCESS:
+    print("%s" % packetHandler.getTxRxResult(scs_comm_result))
+elif scs_error != 0:
+    print("%s" % packetHandler.getRxPacketError(scs_error))
+
 scs_comm_result, scs_error = move_to_angle(packetHandler, 4, 0, 200, 50)
+if scs_comm_result != COMM_SUCCESS:
+    print("%s" % packetHandler.getTxRxResult(scs_comm_result))
+elif scs_error != 0:
+    print("%s" % packetHandler.getRxPacketError(scs_error))
+
+scs_comm_result, scs_error = move_to_angle(packetHandler, 5, 0, 200, 50)
+if scs_comm_result != COMM_SUCCESS:
+    print("%s" % packetHandler.getTxRxResult(scs_comm_result))
+elif scs_error != 0:
+    print("%s" % packetHandler.getRxPacketError(scs_error))
+
+scs_comm_result, scs_error = move_to_angle(packetHandler, 6, 70, 200, 50)
 if scs_comm_result != COMM_SUCCESS:
     print("%s" % packetHandler.getTxRxResult(scs_comm_result))
 elif scs_error != 0:

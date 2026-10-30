@@ -4,7 +4,7 @@ from new.raspberry.RobotArm.FTServo_Python.scservo_sdk import COMM_SUCCESS
 
 JOINTS = {
     1: {
-        "zero_raw": 2600,
+        "zero_raw": 2510,
         "min_angle": -90,
         "max_angle": 90,
         "direction": -1,
@@ -18,11 +18,10 @@ JOINTS = {
     },
 
     3: {
-        "zero_raw": 2160,
+        "zero_raw": 200,
         "min_angle": -180,
         "max_angle": 0,
         "direction": -1,
-        "forbidden_raw": (91, 2160),
     },
 
     4: {
@@ -34,14 +33,14 @@ JOINTS = {
     },
 
     5: {
-            "zero_raw": 3360,
+            "zero_raw": 1030,
             "min_angle": -180,
             "max_angle": 180,
             "direction": 1,
     },
 
     6: {
-            "zero_raw": 350,
+            "zero_raw": 1080,
             "min_angle": 0,
             "max_angle": 90,
             "direction": 1,
@@ -80,6 +79,8 @@ def move_to_angle(packetHandler, scs_id, angle_input: float, speed, acc):
 
     speed = abs(speed)  # forza sempre positivi
     acc = abs(acc)
+
+    print("Pos: ", pos)
 
     scs_comm_result, scs_error = packetHandler.WritePosEx(scs_id, pos, speed, acc)
     if scs_comm_result != COMM_SUCCESS:

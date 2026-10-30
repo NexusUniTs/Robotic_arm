@@ -16,7 +16,7 @@ delle traiettorie.
 import sys
 
 sys.path.append("../../..")
-from FTServo_Python.scservo_sdk import *
+from .FTServo_Python.scservo_sdk import *
 from new.raspberry.RobotArm import icaro_joint_conversion
 
 
