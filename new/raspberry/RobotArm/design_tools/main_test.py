@@ -9,9 +9,9 @@ import numpy as np
 
 
 icaro = RobotArm()
-icaro.connect(3)
+icaro.connect(5)
 dedalo = RobotArm()
-dedalo.connect(5)
+dedalo.connect(3)
 
 try:
     while True:

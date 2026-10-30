@@ -63,19 +63,19 @@ class RobotArm:
         for i in range (5):
 
             q_raw = icaro_joint_conversion.angle_to_raw(i+1, q_target[i])
-            self.packetHandler.SyncWritePosEx(i + 1, q_raw, 60, 50)
+            self.packetHandler.SyncWritePosEx(i + 1, q_raw, -200, 100)
 
         #Comanda l'end effector
 
         gripper_raw = icaro_joint_conversion.angle_to_raw(6, gripper_position)
-        self.packetHandler.SyncWritePosEx(6, gripper_raw, 60, 50)
+        self.packetHandler.SyncWritePosEx(6, gripper_raw, -200, 100)
 
         self.packetHandler.groupSyncWrite.txPacket()  # invia tutto in un colpo solo
         self.packetHandler.groupSyncWrite.clearParam()
 
     def move_joint(self, scs_id, target):
         q_raw = icaro_joint_conversion.angle_to_raw(scs_id, target)
-        self.packetHandler.SyncWritePosEx(scs_id, q_raw, -150, 80)
+        self.packetHandler.SyncWritePosEx(scs_id, q_raw, 400, 80)
 
         self.packetHandler.groupSyncWrite.txPacket()  # invia tutto in un colpo solo
         self.packetHandler.groupSyncWrite.clearParam()

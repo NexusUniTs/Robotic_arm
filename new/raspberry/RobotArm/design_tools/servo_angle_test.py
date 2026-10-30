@@ -19,7 +19,7 @@ from new.raspberry.RobotArm.FTServo_Python.scservo_sdk import *                 
 # Initialize PortHandler instance
 # Set the port path
 # Get methods and members of PortHandlerLinux or PortHandlerWindows
-portHandler = PortHandler('COM3') #ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
+portHandler = PortHandler('COM5') #ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
 
 # Initialize PacketHandler instance
 # Get methods and members of Protocol
